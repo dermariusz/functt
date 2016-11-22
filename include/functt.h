@@ -10,6 +10,9 @@
 
 namespace functt {
 
+typedef varmap std::map<std::string, std::string>;
+typedef funmap std::function<std::string(std::string)>;
+
 using std::experimental::optional;
 
 using std::function;

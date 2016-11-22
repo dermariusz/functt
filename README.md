@@ -13,8 +13,8 @@ functt is a template toolkit that uses a template language which is inspired by 
 ``` cpp
 functt::Template view("{{variable}}, {{{variable}}, {{#lambda}}Hello{{/lambda}}");
 
-std::map<std::string, std::string> vars;
-std::map<std::string, std::function<std::string(std::string)>> funs;
+functt::varmap vars;
+functt::funmap funs;
 
 vars["variable"] = "Some Variable";
 funs["lambda"] = [](std::string str) {
