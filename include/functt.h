@@ -10,8 +10,8 @@
 
 namespace functt {
 
-typedef varmap std::map<std::string, std::string>;
-typedef funmap std::function<std::string(std::string)>;
+typedef std::map<std::string, std::string> varmap;
+typedef std::function<std::string(std::string)> funmap;
 
 using std::experimental::optional;
 
@@ -131,6 +131,7 @@ public:
                 size_t eot = 0;
 
                 for (size_t i = end + 1; i < m_str.size(); ++i) {
+
                     if (type == Token::TYPE_UNESC && m_str[i-2] == '}' && m_str[i-1] == '}' && m_str[i] == '}') {
                         cur_var = string(m_str, end, i - end - 2);
                         eot = i;
