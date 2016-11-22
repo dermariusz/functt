@@ -22,13 +22,16 @@ funs["lambda"] = [](std::string str) {
 };
 
 std::cout << view.render(vars, funs) << std::endl;
+
+// Output: Some Variable, Some Variable, Hello
+
 ```
 
 ## Template Language Reference
 
 ```
 Variables are by default html escaped:                                  {{variable}}
-This variable is unescaped:                                             {{{variable}}}
+This variable will not be esacaped:                                     {{{variable}}}
 The function called lambda will be called with the string param "Hello" {{#lambda}}Hello{{/lambda}}
 ```
 
