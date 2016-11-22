@@ -21,7 +21,7 @@ funs["lambda"] = [](std::string str) {
 	return str;
 };
 
-std::cout << view.render() << std::endl;
+std::cout << view.render(vars, funs) << std::endl;
 ```
 
 ## Template Language Reference
