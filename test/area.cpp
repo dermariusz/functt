@@ -10,6 +10,10 @@ int main() {
     }});
 
     std::string expected("Hello World!\nHow do you ask a {{question}}? Ask as simple as possible.");
-    if (output != expected) return 1;
+
+    if (output != expected) {
+	std::cout << output << std::endl;
+	return 1;
+    }
     return 0;
 }
