@@ -130,7 +130,12 @@ public:
                 size_t eot = 0;
 
                 for (size_t i = end + 1; i < m_str.size(); ++i) {
-                    if (m_str[i-1] == '}' && m_str[i] == '}') {
+                    if (type == Token::TYPE_UNESC && m_str[i-2] == '}' && m_str[i-1] == '}' && m_str[i] == '}') {
+                        cur_var = string(m_str, end, i - end - 2);
+                        eot = i;
+                        break;
+
+                    } else if (type != Token::TYPE_UNESC && m_str[i-1] == '}' && m_str[i] == '}') {
                         cur_var = string(m_str, end, i - end - 1);
                         eot = i;
                         break;
@@ -200,6 +205,7 @@ public:
 
     string render(map<string, string> varmap, map<string, function<string(string)>> funcmap) {
         m_view = m_lexer.str();
+
         while (m_lexer.has_next()) tokens.push_back(m_lexer.next());
 
         optional<Token> begin;

@@ -28,7 +28,7 @@ std::cout << view.render() << std::endl;
 
 ```
 Variables are by default html escaped:                                  {{variable}}
-This variable is unescaped:                                             {{{variable}}
+This variable is unescaped:                                             {{{variable}}}
 The function called lambda will be called with the string param "Hello" {{#lambda}}Hello{{/lambda}}
 ```
 
