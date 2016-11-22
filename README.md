@@ -1,12 +1,12 @@
 # functt
 
-functt is heavily reduced template language which is inspired by the Mustache template language. This the reference implementation of the language.
+functt is heavily reduced template language which is inspired by the Mustache template language.
 
 ## Features
 
  * functional interface
- * use c++14 features
- * simple to integrate into own codebase because it only consists of one header
+ * use of c++14 features
+ * simple to integrate into another codebase because it only consists of a single header
 
 ## Example Usage
 
