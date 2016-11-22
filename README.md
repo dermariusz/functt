@@ -5,8 +5,8 @@ functt is heavily reduced template language which is inspired by the Mustache te
 ## Features
 
  * functional interface
- * use c++14 features
- * simple to integrate into own codebase because it only consists of one header
+ * use of c++14 features
+ * simple to integrate into another codebase because it only consists of a single header
 
 ## Example Usage
 

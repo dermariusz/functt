@@ -4,7 +4,6 @@
 #include <experimental/optional>
 
 #include <functional>
-#include <memory>
 #include <string>
 #include <vector>
 #include <map>
@@ -13,7 +12,6 @@ namespace functt {
 
 using std::experimental::optional;
 
-using std::unique_ptr;
 using std::function;
 using std::string;
 using std::vector;
@@ -205,8 +203,10 @@ public:
 
     string render(map<string, string> varmap, map<string, function<string(string)>> funcmap) {
         m_view = m_lexer.str();
-
-        while (m_lexer.has_next()) tokens.push_back(m_lexer.next());
+        while (m_lexer.has_next()) {
+            Token tok = m_lexer.next();
+            tokens.push_back(tok);
+        }
 
         optional<Token> begin;
         for (auto &tok: tokens) {
