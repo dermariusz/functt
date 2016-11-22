@@ -181,7 +181,7 @@ class Template {
 private:
     string m_view;
     Lexer m_lexer;
-    vector<Token> tokens;
+    vector<Token> m_tokens;
 
 protected:
     void replace_token(Token &tok, string &repl) {
@@ -189,7 +189,7 @@ protected:
         m_view.replace(tok.begin(), length, repl);
         ssize_t difflen = repl.length() - length;
 
-        for (Token &it: tokens) {
+        for (Token &it: m_tokens) {
             it.update_position(tok.begin(), tok.end(), difflen);
         }
 
@@ -208,11 +208,11 @@ public:
         m_view = m_lexer.str();
         while (m_lexer.has_next()) {
             Token tok = m_lexer.next();
-            tokens.push_back(tok);
+            m_tokens.push_back(tok);
         }
 
         optional<Token> begin;
-        for (auto &tok: tokens) {
+        for (auto &tok: m_tokens) {
             if ((tok.type() & Token::TYPE_VAR) == Token::TYPE_VAR) {
                 string replace = varmap.at(tok.varname());
                 if (tok.type() != Token::TYPE_UNESC) html_encode(replace);
