@@ -1,6 +1,6 @@
 # functt
 
-functt is heavily reduced template language which is inspired by the Mustache template language. This the reference implementation of the language.
+functt is heavily reduced template language which is inspired by the Mustache template language.
 
 ## Features
 
