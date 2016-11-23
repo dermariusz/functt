@@ -151,12 +151,14 @@ public:
 
                 }
 
-                m_pos = eot + 1;
-                return Token(begin, eot+1, type, cur_var);
+                eot++;
+                m_pos = eot;
+                return Token(begin, eot, type, cur_var);
 
             } else {
-                m_pos = end + 1;
-                return Token(begin, end+1, Token::TYPE_TEXT);
+                end++;
+                m_pos = end;
+                return Token(begin, end, Token::TYPE_TEXT);
             }
         }
 
@@ -167,8 +169,10 @@ public:
             }
             end++;
         }
-        m_pos = end + 1;
-        return Token(begin, end+1, Token::TYPE_TEXT);
+
+        end++;
+        m_pos = end;
+        return Token(begin, end, Token::TYPE_TEXT);
     }
 
     string str() {
