@@ -23,7 +23,7 @@ using std::map;
 void html_encode(string& data) {
     string buffer;
     buffer.reserve(data.size()*1.05);
-    for(size_t pos = 0; pos != data.size(); ++pos) {
+    for(size_t pos = 0; pos < data.size(); ++pos) {
         switch(data[pos]) {
         case '&':
             buffer.append("&amp;");
@@ -163,8 +163,8 @@ public:
         }
 
         while (end < m_str.length()) {
-            if (m_str[end] == '{') {
-                end--;
+            if (m_str[end-1] == '{' && m_str[end] == '{') {
+                end -= 2;
                 break;
             }
             end++;
