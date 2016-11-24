@@ -209,7 +209,7 @@ public:
     Template (const string &view): m_lexer(view) {
     }
 
-    string render(map<string, string> varmap, map<string, function<string(string)>> funcmap) {
+    string render(varmap vm, funmap fm) {
         m_view = m_lexer.str();
         while (m_lexer.has_next()) {
             Token tok = m_lexer.next();
@@ -237,8 +237,8 @@ public:
         return m_view;
     }
 
-    string render(const map<string, string> varmap) {
-        return render(varmap, {});
+    string render(varmap vm) {
+        return render(vm, {});
     }
 };
 
