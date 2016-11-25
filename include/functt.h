@@ -54,7 +54,7 @@ void html_encode(string& data) {
 class Token {
 
 public:
-    enum TokenType {NONE, BEGIN, END, VAR = 4, UNESC = 12, TEXT = 16};
+    enum TokenType {NONE, BEGIN, END, VAR = 4, UNESC = 12, TEXT = 16, COMMENT = 18};
 
 private:
     size_t m_begin;
@@ -121,6 +121,10 @@ public:
 
                 } else if (m_str[end] == '{') {
                     type = Token::UNESC;
+                    end++;
+
+                } else if (m_str[end] == '!') {
+                    type = Token::COMMENT;
                     end++;
 
                 } else {
@@ -225,12 +229,16 @@ public:
 
             } else if (tok.type() == Token::BEGIN) {
                 begin = tok;
+
             } else if (tok.type() == Token::END) {
                 function<string(string)> func = fm.at(tok.varname());
                 if(func && begin) {
                     string replace = func(string(m_view, begin->end(), tok.begin() - begin->end()));
                     replace_tokens(*begin, tok, replace);
                 }
+
+            } else if (tok.type() == Token::COMMENT) {
+                replace_token(tok, "");
             }
 
         }
