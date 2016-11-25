@@ -10,15 +10,15 @@
 
 namespace functt {
 
-typedef std::map<std::string, std::string> varmap;
-typedef std::function<std::string(std::string)> funmap;
-
 using std::experimental::optional;
 
 using std::function;
 using std::string;
 using std::vector;
 using std::map;
+
+typedef map<string, string> varmap;
+typedef map<string, function<string(string)>> funmap;
 
 void html_encode(string& data) {
     string buffer;
@@ -54,7 +54,7 @@ void html_encode(string& data) {
 class Token {
 
 public:
-    enum TokenType {TYPE_NULL, TYPE_BEGIN = 1, TYPE_END = 2, TYPE_VAR = 4, TYPE_UNESC = 12, TYPE_TEXT = 16};
+    enum TokenType {NONE, BEGIN, END, VAR = 4, UNESC = 12, TEXT = 16};
 
 private:
     size_t m_begin;
@@ -109,22 +109,22 @@ public:
 
         if (m_str[begin] == '{' && begin + 1 < m_str.size() && m_str[begin+1] == '{') {
 
-            Token::TokenType type = Token::TYPE_NULL;
+            Token::TokenType type = Token::NONE;
             end += 2;
 
             if (m_beg_var.empty() || m_str[end] == '/')  {
 
                 if (m_str[end] == '/') {
-                    type = Token::TYPE_END;
+                    type = Token::END;
                     m_beg_var.clear();
                     end++;
 
                 } else if (m_str[end] == '{') {
-                    type = Token::TYPE_UNESC;
+                    type = Token::UNESC;
                     end++;
 
                 } else {
-                    type = Token::TYPE_VAR;
+                    type = Token::VAR;
                 }
 
                 string cur_var;
@@ -132,12 +132,12 @@ public:
 
                 for (size_t i = end + 1; i < m_str.size(); ++i) {
 
-                    if (type == Token::TYPE_UNESC && m_str[i-2] == '}' && m_str[i-1] == '}' && m_str[i] == '}') {
+                    if (type == Token::UNESC && m_str[i-2] == '}' && m_str[i-1] == '}' && m_str[i] == '}') {
                         cur_var = string(m_str, end, i - end - 2);
                         eot = i;
                         break;
 
-                    } else if (type != Token::TYPE_UNESC && m_str[i-1] == '}' && m_str[i] == '}') {
+                    } else if (type != Token::UNESC && m_str[i-1] == '}' && m_str[i] == '}') {
                         cur_var = string(m_str, end, i - end - 1);
                         eot = i;
                         break;
@@ -145,7 +145,7 @@ public:
                 }
 
                 if (m_str[end] == '#') {
-                    type = Token::TYPE_BEGIN;
+                    type = Token::BEGIN;
                     m_beg_var = cur_var;
                     end++;
 
@@ -158,7 +158,7 @@ public:
             } else {
                 end++;
                 m_pos = end;
-                return Token(begin, end, Token::TYPE_TEXT);
+                return Token(begin, end, Token::TEXT);
             }
         }
 
@@ -172,7 +172,7 @@ public:
 
         end++;
         m_pos = end;
-        return Token(begin, end, Token::TYPE_TEXT);
+        return Token(begin, end, Token::TEXT);
     }
 
     string str() {
@@ -189,7 +189,7 @@ private:
     vector<Token> m_tokens;
 
 protected:
-    void replace_token(Token &tok, string &repl) {
+    void replace_token(Token &tok, const string &repl) {
         size_t length = tok.end() - tok.begin();
         m_view.replace(tok.begin(), length, repl);
         ssize_t difflen = repl.length() - length;
@@ -201,7 +201,7 @@ protected:
     }
 
     void replace_tokens(Token &tok1, Token &tok2, string &str) {
-        Token newtoken(tok1.begin(), tok2.end(), Token::TYPE_NULL);
+        Token newtoken(tok1.begin(), tok2.end(), Token::NONE);
         replace_token(newtoken, str);
     }
 
@@ -218,15 +218,15 @@ public:
 
         optional<Token> begin;
         for (auto &tok: m_tokens) {
-            if ((tok.type() & Token::TYPE_VAR) == Token::TYPE_VAR) {
-                string replace = varmap.at(tok.varname());
-                if (tok.type() != Token::TYPE_UNESC) html_encode(replace);
+            if ((tok.type() & Token::VAR) == Token::VAR) {
+                string replace = vm.at(tok.varname());
+                if (tok.type() != Token::UNESC) html_encode(replace);
                 replace_token(tok, replace);
 
-            } else if (tok.type() == Token::TYPE_BEGIN) {
+            } else if (tok.type() == Token::BEGIN) {
                 begin = tok;
-            } else if (tok.type() == Token::TYPE_END) {
-                function<string(string)> func = funcmap.at(tok.varname());
+            } else if (tok.type() == Token::END) {
+                function<string(string)> func = fm.at(tok.varname());
                 if(func && begin) {
                     string replace = func(string(m_view, begin->end(), tok.begin() - begin->end()));
                     replace_tokens(*begin, tok, replace);
@@ -237,8 +237,13 @@ public:
         return m_view;
     }
 
+    /* Convenience functions */
     string render(varmap vm) {
         return render(vm, {});
+    }
+
+    string render() {
+        return render({}, {});
     }
 };
 
