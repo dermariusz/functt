@@ -1,3 +1,6 @@
+comments = executable('comments', 'comments.cpp', include_directories : inc)
+test('Test comments', comments)
+
 var = executable('escaped_html', 'escaped_html.cpp', include_directories : inc)
 test('Test escaped html variable', var)
 
