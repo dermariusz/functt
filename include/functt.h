@@ -54,7 +54,7 @@ void html_encode(string& data) {
 class Token {
 
 public:
-    enum TokenType {NONE, BEGIN, END, VAR = 4, UNESC = 12, TEXT = 16, COMMENT = 18};
+    enum TokenType {NONE, BEGIN, END, VAR, UNESC = 7, TEXT = 8, COMMENT = 16};
 
 private:
     size_t m_begin;
