@@ -20,37 +20,6 @@ using std::map;
 typedef map<string, string> varmap;
 typedef map<string, function<string(string)>> funmap;
 
-void html_encode(string& data) {
-    string buffer;
-    buffer.reserve(data.size()*1.05);
-    for(size_t pos = 0; pos < data.size(); ++pos) {
-        switch(data[pos]) {
-        case '&':
-            buffer.append("&amp;");
-            break;
-        case '<':
-            buffer.append("&lt;");
-            break;
-        case '>':
-            buffer.append("&gt;");
-            break;
-        case '\"':
-            buffer.append("&quot;");
-            break;
-        case '\'':
-            buffer.append("&#x27;");
-            break;
-        case '/':
-            buffer.append("&#x2F;");
-            break;
-        default:
-            buffer.append(&data[pos], 1);
-            break;
-        }
-    }
-    data.swap(buffer);
-}
-
 class Token {
 
 public:
@@ -211,6 +180,37 @@ protected:
 
 public:
     Template (const string &view): m_lexer(view) {
+    }
+
+    static void html_encode(string& data) {
+        string buffer;
+        buffer.reserve(data.size()*1.05);
+        for(size_t pos = 0; pos < data.size(); ++pos) {
+            switch(data[pos]) {
+            case '&':
+                buffer.append("&amp;");
+                break;
+            case '<':
+                buffer.append("&lt;");
+                break;
+            case '>':
+                buffer.append("&gt;");
+                break;
+            case '\"':
+                buffer.append("&quot;");
+                break;
+            case '\'':
+                buffer.append("&#x27;");
+                break;
+            case '/':
+                buffer.append("&#x2F;");
+                break;
+            default:
+                buffer.append(&data[pos], 1);
+                break;
+            }
+        }
+        data.swap(buffer);
     }
 
     string render(varmap vm, funmap fm) {
