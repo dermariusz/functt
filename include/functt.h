@@ -1,5 +1,5 @@
-#ifndef FUNCTT_H
-#define FUNCTT_H
+#ifndef __FUNCTT_H__
+#define __FUNCTT_H__
 
 #include <experimental/optional>
 
@@ -257,4 +257,4 @@ public:
 
 }
 
-#endif /* FUNCTT_H */
+#endif /* __FUNCTT_H__ */
