@@ -31,6 +31,13 @@ private:
     TokenType m_type;
     string m_varname;
 
+    void trim(string &s) {
+        while (s.compare(0, 1, " ") == 0)
+            s.erase(s.begin());
+        while (s.size() > 0 && s.compare(s.size() - 1, 1, " ") == 0)
+            s.erase(s.end() - 1);
+    }
+
 public:
 
     Token(size_t begin, size_t end, TokenType type, const string & varname): m_begin(begin), m_end(end), m_type(type), m_varname(varname) {}
@@ -54,6 +61,7 @@ public:
         return m_type;
     }
     string    varname() {
+        trim(m_varname);
         return m_varname;
     }
 };
